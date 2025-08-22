@@ -68,6 +68,7 @@ main() {
     echo "Starting E6Setup installation..."
     
     install_system_deps
+    configure_system_settings
     install_uv
     setup_project
     run_training
