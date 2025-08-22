@@ -29,13 +29,13 @@ setup_project() {
     cd E6Setup
     
     echo "🔧 Creating Python environment and installing dependencies..."
-    ~/.local/bin/uv sync
+    uv sync
 }
 
 run_training() {
     echo "🏃 Starting CIFAR training..."
     cd ~/E6Setup
-    ~/.local/bin/uv run python main.py
+    uv run python main.py
 }
 
 main() {
