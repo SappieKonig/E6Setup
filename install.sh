@@ -10,6 +10,32 @@ install_system_deps() {
     sudo apt install -y git curl
 }
 
+configure_system_settings() {
+    echo "⚙️ Configuring system for optimal training performance..."
+    
+    # Set CPU governor to performance mode (if available)
+    if command -v cpupower &> /dev/null; then
+        sudo cpupower frequency-set -g performance 2>/dev/null || echo "Note: Could not set CPU to performance mode"
+    else
+        echo "Note: cpupower not installed, skipping CPU performance mode"
+    fi
+    
+    # Disable screen blanking and suspend for current session
+    if [ "$XDG_SESSION_TYPE" = "x11" ] || [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+        # Disable screen blanking
+        gsettings set org.gnome.desktop.session idle-delay 0 2>/dev/null || true
+        gsettings set org.gnome.desktop.screensaver lock-enabled false 2>/dev/null || true
+        
+        # Disable automatic suspend
+        gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing' 2>/dev/null || true
+        gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing' 2>/dev/null || true
+        
+        echo "✓ Display and power settings configured"
+    else
+        echo "Note: Not in a graphical session, skipping display settings"
+    fi
+}
+
 install_uv() {
     echo "🐍 Installing uv (Python environment manager)..."
     curl -LsSf https://astral.sh/uv/install.sh | sh
