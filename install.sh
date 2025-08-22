@@ -13,11 +13,11 @@ install_system_deps() {
 configure_system_settings() {
     echo "⚙️ Configuring system for optimal training performance..."
     
-    # Set CPU governor to performance mode (if available)
-    if command -v cpupower &> /dev/null; then
-        sudo cpupower frequency-set -g performance 2>/dev/null || echo "Note: Could not set CPU to performance mode"
+    # Set power profile to performance mode
+    if command -v powerprofilesctl &> /dev/null; then
+        powerprofilesctl set performance 2>/dev/null && echo "✓ Power profile set to Performance" || echo "Note: Could not set power profile"
     else
-        echo "Note: cpupower not installed, skipping CPU performance mode"
+        echo "Note: powerprofilesctl not available, skipping power profile"
     fi
     
     # Disable screen blanking and suspend for current session
